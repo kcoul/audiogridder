@@ -15,7 +15,7 @@ macro(ag_add_plugin type)
     set(productname "${productname}${type}")
   endif()
 
-  set(AG_FORMATS AU VST3)
+  set(AG_FORMATS AU VST3 AUv3)
 
   if(AG_VST2_PLUGIN_ENABLED)
     list(APPEND AG_FORMATS VST)

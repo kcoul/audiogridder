@@ -16,6 +16,8 @@ namespace e47 {
 
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p), m_processor(p), m_newPluginButton("", "newPlug", false), m_genericEditor(p) {
+    m_shouldExit = false;
+        
     setLogTagSource(&m_processor.getClient());
     traceScope();
     initAsyncFunctors();

@@ -6,7 +6,10 @@
  */
 
 #if defined(__APPLE__)
+#include "TargetConditionals.h"
+#if (!TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR)
 #include <ApplicationServices/ApplicationServices.h>
+#endif
 #include <CoreFoundation/CoreFoundation.h>
 #elif defined(_WIN32) || defined(_WIN64)
 #include <windows.h>

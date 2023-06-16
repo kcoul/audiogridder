@@ -236,7 +236,7 @@ void mDNSConnector::sendQuery(const String& service) {
             logln("failed to send query: " << strerror(e));
 #else
             char errstr[64];
-#ifdef JUCE_MAC
+#if (JUCE_MAC || JUCE_IOS)
             const char* estrp = errstr;
             int foundErrStr = strerror_r(e, errstr, sizeof(errstr));
 #elif JUCE_LINUX

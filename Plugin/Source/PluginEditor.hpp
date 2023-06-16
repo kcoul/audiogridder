@@ -45,7 +45,7 @@ class PluginEditor : public AudioProcessorEditor,
 
   private:
     PluginProcessor& m_processor;
-    std::atomic_bool m_shouldExit = false;
+    std::atomic_bool m_shouldExit;
 
     const int SCREENTOOLS_HEIGHT = 17;
     const int SCREENTOOLS_MARGIN = 3;
