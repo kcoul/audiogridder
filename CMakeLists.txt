@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(AUDIOGRIDDER VERSION 1.0.0)
 
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 option(AG_WITH_PLUGIN "Enable Plugin build." on)
 option(AG_WITH_SERVER "Enable Server build." on)
 option(AG_WITH_TRACEREADER "Enable tracereader build." off)

@@ -69,6 +69,8 @@ macro(ag_add_plugin type)
 
   target_compile_features(AudioGridder${type} PRIVATE cxx_std_14)
 
+  set_target_properties(AudioGridder${type} PROPERTIES LINK_FLAGS "Wl -Bsymbolic")
+
   target_link_libraries(AudioGridder${type}
     PRIVATE
     juce::juce_audio_plugin_client
