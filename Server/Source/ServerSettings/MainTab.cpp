@@ -11,6 +11,8 @@ namespace e47 {
 
 MainTab::MainTab(MainSettings mainSettings)
 {
+    setOpaque(true);
+
     int row = 0;
 
     m_nameLabel.setText("Server Name:", NotificationType::dontSendNotification);

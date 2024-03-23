@@ -11,6 +11,8 @@ namespace e47 {
 
 PluginFormatsTab::PluginFormatsTab(FormatSettings formatSettings)
 {
+    setOpaque(true);
+
     int row = 0;
     String tmpStr;
 

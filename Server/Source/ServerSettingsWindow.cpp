@@ -31,6 +31,7 @@ ServerSettingsWindow::ServerSettingsWindow(App* app)
       m_diagnosticsTab(app->getServer()->getCrashReporting())
 #endif
 {
+    setOpaque(true);
     traceScope();
     setUsingNativeTitleBar(true);
 

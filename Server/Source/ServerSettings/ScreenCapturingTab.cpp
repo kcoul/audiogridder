@@ -12,6 +12,8 @@ namespace e47 {
 
 ScreenCapturingTab::ScreenCapturingTab(CaptureSettings captureSettings)
 {
+    setOpaque(true);
+
     String tooltip;
     int row = 0;
 

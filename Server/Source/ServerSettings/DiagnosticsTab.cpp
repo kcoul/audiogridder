@@ -13,6 +13,8 @@ namespace e47 {
 
 DiagnosticsTab::DiagnosticsTab(bool crashReporting)
 {
+    setOpaque(true);
+
     int row = 0;
 
     m_loggerLbl.setText("Logging:", NotificationType::dontSendNotification);

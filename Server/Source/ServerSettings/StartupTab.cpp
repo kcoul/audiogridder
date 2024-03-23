@@ -12,6 +12,8 @@ namespace e47 {
 
 StartupTab::StartupTab(bool scanForPlugins)
 {
+    setOpaque(true);
+
     String tooltip;
     int row = 0;
 
