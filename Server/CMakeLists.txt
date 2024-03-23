@@ -63,7 +63,7 @@ juce_add_binary_data(AudioGridderServerData SOURCES
   Resources/icon16.png
   Resources/icon64.png)
 
-set_target_properties(AudioGridderServer PROPERTIES LINK_FLAGS "Wl -Bsymbolic")
+# set_target_properties(AudioGridderServer PROPERTIES LINK_FLAGS "-Wl -Bsymbolic")
 
 target_link_libraries(AudioGridderServer PRIVATE
   AudioGridderServerData

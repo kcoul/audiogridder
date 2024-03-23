@@ -45,7 +45,7 @@ juce_add_binary_data(AudioGridderPluginTrayData SOURCES
   Resources/icon16.png
   Resources/icon64.png)
 
-set_target_properties(AudioGridderPluginTray PROPERTIES LINK_FLAGS "Wl -Bsymbolic")
+# set_target_properties(AudioGridderPluginTray PROPERTIES LINK_FLAGS "-Wl -Bsymbolic")
 
 target_link_libraries(AudioGridderPluginTray PRIVATE
   AudioGridderPluginTrayData
