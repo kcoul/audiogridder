@@ -13,6 +13,7 @@ macro(FFMPEG_FIND varname shortname headername)
     /usr/local/include
     /usr/include/
     ${CMAKE_SOURCE_DIR}/audiogridder-deps/${system_name_lower}-${CMAKE_SYSTEM_PROCESSOR}/include
+    /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/include
     NO_DEFAULT_PATH
     DOC "Location of FFMPEG Headers")
 
@@ -31,6 +32,7 @@ macro(FFMPEG_FIND varname shortname headername)
     /usr/local/lib
     /usr/lib
     ${CMAKE_SOURCE_DIR}/audiogridder-deps/${system_name_lower}-${CMAKE_SYSTEM_PROCESSOR}/lib
+    /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/
     NO_DEFAULT_PATH
     DOC "Location of FFMPEG Libs")
 

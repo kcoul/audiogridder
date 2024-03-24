@@ -22,8 +22,8 @@ option(AG_VST2_PLUGIN_ENABLED "Enable the VST2 plugins." off)
 option(AG_AAX_PLUGIN_ENABLED "Enable the AAX plugins." off)
 
 # Uncomment and set to proper path for building with VSCode
-#set(AG_DEPS_ROOT $ENV{HOME}/audiogridder/audiogridder-deps/linux-x86_64)
-#set(AG_SDKS_ROOT ${AG_DEPS_ROOT})
+set(AG_DEPS_ROOT $ENV{HOME}/repos/audiogridder/audiogridder-deps/linux-x86_64)
+# set(AG_SDKS_ROOT ${AG_DEPS_ROOT})
 
 file(STRINGS ${CMAKE_SOURCE_DIR}/package/VERSION.num AG_VERSION)
 

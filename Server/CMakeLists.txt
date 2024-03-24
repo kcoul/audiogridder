@@ -75,7 +75,13 @@ target_link_libraries(AudioGridderServer PRIVATE
   juce::juce_recommended_config_flags
   juce::juce_recommended_lto_flags
   juce::juce_recommended_warning_flags
-  ${FFMPEG_LIBRARIES}
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libavcodec.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libavdevice.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libavfilter.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libavformat.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libavutil.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libswresample.a
+  /home/usdev/repos/audiogridder/cmake-build-debug/vcpkg_installed/x64-linux/lib/libswscale.a
   ${WEBP_LIBRARIES}
   ${SENTRY_LIBRARIES})
 
