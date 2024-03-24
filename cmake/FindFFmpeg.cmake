@@ -3,6 +3,8 @@
 # example: FFMPEG_FIND(AVFORMAT avformat avformat.h)
 macro(FFMPEG_FIND varname shortname headername)
 
+  string(TOLOWER ${CMAKE_SYSTEM_NAME} system_name_lower)
+
   find_path(FFMPEG_${varname}_INCLUDE_DIRS lib${shortname}/${headername}
     PATHS
     ${FFMPEG_ROOT}/include
@@ -10,6 +12,7 @@ macro(FFMPEG_FIND varname shortname headername)
     /usr/include/x86_64-linux-gnu
     /usr/local/include
     /usr/include/
+    ${CMAKE_SOURCE_DIR}/audiogridder-deps/${system_name_lower}-${CMAKE_SYSTEM_PROCESSOR}/include
     NO_DEFAULT_PATH
     DOC "Location of FFMPEG Headers")
 
@@ -27,6 +30,7 @@ macro(FFMPEG_FIND varname shortname headername)
     /usr/lib/x86_64-linux-gnu
     /usr/local/lib
     /usr/lib
+    ${CMAKE_SOURCE_DIR}/audiogridder-deps/${system_name_lower}-${CMAKE_SYSTEM_PROCESSOR}/lib
     NO_DEFAULT_PATH
     DOC "Location of FFMPEG Libs")
 
