@@ -162,7 +162,7 @@ void Server::loadConfig() {
     m_pluginWindowsOnTop = jsonGetValue(cfg, "PluginWindowsOnTop", m_pluginWindowsOnTop);
     m_scanForPlugins = jsonGetValue(cfg, "ScanForPlugins", m_scanForPlugins);
     m_crashReporting = jsonGetValue(cfg, "CrashReporting", m_crashReporting);
-    m_processingTraceTresholdMs = jsonGetValue(cfg, "ProcessingTraceTresholdMs", m_processingTraceTresholdMs);
+    m_processingTraceThresholdMs = jsonGetValue(cfg, "ProcessingTraceTresholdMs", m_processingTraceThresholdMs); //TODO: How to update the JSON string without breaking things?
     logln("crash reporting is " << (m_crashReporting ? "enabled" : "disabled"));
     m_sandboxMode = (SandboxMode)jsonGetValue(cfg, "SandboxMode", m_sandboxMode);
     logln("sandbox mode is " << (m_sandboxMode == SANDBOX_CHAIN    ? "chain isolation"
@@ -175,6 +175,18 @@ void Server::loadConfig() {
             m_pluginExclude.insert(s.get<std::string>());
         }
     }
+
+    //TODO: New json-persisted I/O variables won't have json fields until they get written once
+    m_enableNativeIO = false; //<--- sensible default value that should be over-written by json once user enables it
+    //These settings don't need to be persisted in JSON
+    m_minAudioInputChannels = 0;
+    m_maxAudioInputChannels = std::numeric_limits<int>::max();
+    m_minAudioOutputChannels = 0;
+    m_maxAudioOutputChannels = std::numeric_limits<int>::max();
+    m_showMidiInputOptions = true;
+    m_showMidiOutputSelector = true;
+    m_showChannelsAsStereoPairs = false;
+    m_hideAdvancedOptionsWithButton = true; //We would preferably hide these completely, but AudioDeviceSelectorComponent is only a temporary control anyway...
 }
 
 void Server::saveConfig() {
@@ -230,7 +242,9 @@ void Server::saveConfig() {
     j["CrashReporting"] = m_crashReporting;
     j["SandboxMode"] = m_sandboxMode;
     j["SandboxLogAutoclean"] = m_sandboxLogAutoclean;
-    j["ProcessingTraceTresholdMs"] = m_processingTraceTresholdMs;
+    j["ProcessingTraceTresholdMs"] = m_processingTraceThresholdMs; //TODO: We need to fix this too, but need to gracefully roll forward installations in-the-wild to not break things...
+
+    //I/O
 
     File cfg(Defaults::getConfigFileName(Defaults::ConfigServer, {{"id", String(getId())}}));
     logln("saving config to " << cfg.getFullPathName());

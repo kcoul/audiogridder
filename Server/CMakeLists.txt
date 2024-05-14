@@ -66,8 +66,10 @@ juce_add_binary_data(AudioGridderServerData SOURCES
 target_link_libraries(AudioGridderServer PRIVATE
   AudioGridderServerData
   juce::juce_audio_basics
-  juce::juce_audio_processors
+  juce::juce_audio_devices
   juce::juce_audio_formats
+  juce::juce_audio_processors
+  juce::juce_audio_utils
   juce::juce_graphics
   juce::juce_gui_extra
   juce::juce_recommended_config_flags
