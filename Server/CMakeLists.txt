@@ -92,10 +92,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
           "-framework AVFoundation"
           "-framework CoreMedia"
           "-framework OpenGL"
-          "-framework Security")
-  if(AG_MACOS_TARGET STRGREATER_EQUAL 10.8)
-    target_link_libraries(AudioGridderServer PRIVATE "-framework VideoToolbox")
-  endif()
+          "-framework Security"
+          "-framework VideoToolbox")
+
   ag_bundle_add_crashpad(AudioGridderServer)
   ag_bundle_sign(AudioGridderServer)
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
