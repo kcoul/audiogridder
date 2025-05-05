@@ -177,7 +177,7 @@ void Server::loadConfig() {
     }
 
     //TODO: New json-persisted I/O variables won't have json fields until they get written once
-    m_enableNativeIO = false; //<--- sensible default value that should be over-written by json once user enables it
+    m_enableNativeIO = false; //<--- this should be over-written by json once user enables it
     //These settings don't need to be persisted in JSON
     m_minAudioInputChannels = 0;
     m_maxAudioInputChannels = std::numeric_limits<int>::max();
@@ -185,8 +185,10 @@ void Server::loadConfig() {
     m_maxAudioOutputChannels = std::numeric_limits<int>::max();
     m_showMidiInputOptions = true;
     m_showMidiOutputSelector = true;
-    m_showChannelsAsStereoPairs = false;
-    m_hideAdvancedOptionsWithButton = true; //We would preferably hide these completely, but AudioDeviceSelectorComponent is only a temporary control anyway...
+    m_showChannelsAsStereoPairs = true;
+    //Servers must lock their sample rate (and buffer size?) to the client's to have a hope of syncing,
+    //repurposing pane as read-only would be a great way to test whether syncing these settings is working properly.
+    m_hideAdvancedOptionsWithButton = true;
 }
 
 void Server::saveConfig() {
@@ -1211,13 +1213,13 @@ void Server::runServer() {
     if (getScreenLocalMode() && Defaults::unixDomainSocketsSupported()) {
         auto socketPath = Defaults::getSocketPath(Defaults::SERVER_SOCK, {{"id", String(getId())}}, true);
         logln("creating listener " << socketPath.getFullPathName());
-        if (!m_masterSocketLocal.createListener(socketPath)) {
+        if (!m_masterSocketLocal.createListener(100, socketPath.getFullPathName())) {
             logln("failed to create local master listener");
         }
     }
 
     logln("creating listener " << (m_host.length() == 0 ? "*" : m_host) << ":" << (m_port + getId()));
-    if (m_masterSocket.createListener6(m_port + getId(), m_host)) {
+    if (m_masterSocket.createListener(m_port + getId(), m_host)) {
         logln("server started: ID=" << getId() << ", PORT=" << m_port + getId() << ", NAME=" << m_name);
         while (!threadShouldExit()) {
             StreamingSocket* clnt = nullptr;
@@ -1301,8 +1303,11 @@ void Server::runServer() {
                     auto sandbox = std::make_shared<SandboxMaster>(*this, id);
                     logln("creating sandbox " << id);
                     if (sandbox->launchWorkerProcess(
-                            File::getSpecialLocation(File::currentExecutableFile), Defaults::SANDBOX_CMD_PREFIX,
-                            {"-id", String(getId()), "-islocal", String((int)isLocal), "-clientid", id}, 3000, 30000)) {
+                            File::getSpecialLocation(File::currentExecutableFile),
+                            Defaults::SANDBOX_CMD_PREFIX,
+                            {"-id", String(getId()), "-islocal", String((int)isLocal), "-clientid", id},
+                             3000,
+                             30000)) {
                         sandbox->onPortReceived = [this, id, clnt](int sandboxPort) {
                             traceScope();
                             if (!sendHandshakeResponse(clnt, true, sandboxPort)) {
