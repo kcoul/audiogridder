@@ -20,6 +20,7 @@ class IOTab  : public juce::Component
     IOTab(IOSettings ioSettings);
     void paint (Graphics& g) override;
     void resized() override;
+    bool getNativeIOEnabled() { return m_nativeIO.getToggleState(); }
   private:
     ToggleButton m_nativeIO;
     Label m_nativeIOLbl;
