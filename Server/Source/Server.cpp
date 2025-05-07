@@ -177,7 +177,7 @@ void Server::loadConfig() {
     }
 
     //TODO: New json-persisted I/O variables won't have json fields until they get written once
-    m_enableNativeIO = false; //<--- this should be over-written by json once user enables it
+    m_enableNativeIO = jsonGetValue(cfg, "EnableNativeIO", m_enableNativeIO);
     //These settings don't need to be persisted in JSON
     m_minAudioInputChannels = 0;
     m_maxAudioInputChannels = std::numeric_limits<int>::max();
