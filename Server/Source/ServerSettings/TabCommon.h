@@ -90,7 +90,6 @@ struct CaptureSettings {
 };
 
 struct IOSettings {
-    bool enableNativeIO;
     AudioDeviceManager& deviceManager;
     int minAudioInputChannels;
     int maxAudioInputChannels;

@@ -56,8 +56,6 @@ target_compile_definitions(AudioGridderServer PRIVATE
   JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:AudioGridderServer,JUCE_VERSION>"
   JUCE_DISPLAY_SPLASH_SCREEN=0)
 
-target_compile_features(AudioGridderServer PRIVATE cxx_std_14)
-
 juce_add_binary_data(AudioGridderServerData SOURCES
   Resources/icon.png
   Resources/icon16.png

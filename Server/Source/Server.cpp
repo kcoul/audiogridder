@@ -176,19 +176,29 @@ void Server::loadConfig() {
         }
     }
 
-    //TODO: New json-persisted I/O variables won't have json fields until they get written once
-    m_enableNativeIO = jsonGetValue(cfg, "EnableNativeIO", m_enableNativeIO);
-    //These settings don't need to be persisted in JSON
-    m_minAudioInputChannels = 0;
-    m_maxAudioInputChannels = std::numeric_limits<int>::max();
-    m_minAudioOutputChannels = 0;
-    m_maxAudioOutputChannels = std::numeric_limits<int>::max();
-    m_showMidiInputOptions = true;
-    m_showMidiOutputSelector = true;
-    m_showChannelsAsStereoPairs = true;
-    //Servers must lock their sample rate (and buffer size?) to the client's to have a hope of syncing,
-    //repurposing pane as read-only would be a great way to test whether syncing these settings is working properly.
-    m_hideAdvancedOptionsWithButton = true;
+    loadDeviceConfig();
+}
+
+void Server::loadDeviceConfig() {
+#if JUCE_DEBUG
+    auto path = std::filesystem::current_path();
+    auto loadPath = path / "NativeIOSettings.xml";
+    juce::File deviceXMLFile (loadPath.string());
+    if (deviceXMLFile.existsAsFile()) {
+        auto deviceXML = juce::XmlDocument::parse(deviceXMLFile);
+        m_audioDeviceManager.initialise(std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), deviceXML.get(), true);
+    }
+#endif
+}
+
+void Server::saveDeviceConfig() {
+#if JUCE_DEBUG
+    auto stateXml = m_audioDeviceManager.createStateXml();
+    auto path = std::filesystem::current_path();
+    auto savePath = path / "NativeIOSettings.xml";
+    juce::File deviceXMLFile(savePath.string());
+    stateXml->writeTo(deviceXMLFile);
+#endif
 }
 
 void Server::saveConfig() {
@@ -244,9 +254,7 @@ void Server::saveConfig() {
     j["CrashReporting"] = m_crashReporting;
     j["SandboxMode"] = m_sandboxMode;
     j["SandboxLogAutoclean"] = m_sandboxLogAutoclean;
-    j["ProcessingTraceTresholdMs"] = m_processingTraceThresholdMs; //TODO: We need to fix this too, but need to gracefully roll forward installations in-the-wild to not break things...
-
-    //I/O
+    j["ProcessingTraceTresholdMs"] = m_processingTraceThresholdMs; //TODO: Fix typo in JSON key
 
     File cfg(Defaults::getConfigFileName(Defaults::ConfigServer, {{"id", String(getId())}}));
     logln("saving config to " << cfg.getFullPathName());

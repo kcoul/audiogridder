@@ -172,6 +172,9 @@ ServerSettingsWindow::ServerSettingsWindow(App* app)
                     }
                 }
             }
+
+            srv2->saveDeviceConfig();
+
             configWriteFile(Defaults::getConfigFileName(Defaults::ConfigServerStartup), {{"IDs", valid.toStdString()}});
         }
 

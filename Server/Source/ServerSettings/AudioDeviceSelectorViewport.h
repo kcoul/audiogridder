@@ -17,12 +17,9 @@ public:
                        ioSettings.showChannelsAsStereoPairs,
                        ioSettings.hideAdvancedOptionsWithButton)
     {
-        audioSettings.setEnabled(false);
         addAndMakeVisible(audioSettings);
         setViewedComponent(&audioSettings);
     }
-
-    void toggleAudioSettings(bool enabled) { audioSettings.setEnabled(enabled); }
 
     void resized() override
     {
