@@ -1875,9 +1875,9 @@ void PluginProcessor::TrayConnection::run() {
             if (!success) {
                 String path = File::getSpecialLocation(File::globalApplicationsDirectory).getFullPathName();
 #ifdef JUCE_MAC
-#ifdef DEBUG
-                path << "/Debug";
-#endif
+//#ifdef DEBUG
+//                path << "/Debug";
+//#endif
                 path << "/AudioGridderPluginTray.app/Contents/MacOS/AudioGridderPluginTray";
 #elif JUCE_WINDOWS
                 path << "/AudioGridderPluginTray/AudioGridderPluginTray.exe";
