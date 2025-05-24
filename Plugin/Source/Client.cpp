@@ -306,23 +306,23 @@ void Client::setOnCloseCallback(OnCloseCallback fn) {
 }
 
 void Client::init(int channelsIn, int channelsOut, int channelsSC, double rate, int samplesPerBlock,
-                  bool doublePrecission) {
+                  bool doublePrecision) {
     traceScope();
     logln("init: channelsIn=" << channelsIn << " channelsOut=" << channelsOut << " channelsSC=" << channelsSC
                               << " rate=" << rate << " samplesPerBlock=" << samplesPerBlock
-                              << " doublePrecision=" << (int)doublePrecission);
+                              << " doublePrecision=" << (int)doublePrecision);
     LockByID lock(*this, INIT1);
     if (!m_ready || m_channelsIn != channelsIn || m_channelsOut != channelsOut || m_channelsSC != channelsSC ||
-        m_sampleRate != rate || m_samplesPerBlock != samplesPerBlock || m_doublePrecission != doublePrecission) {
+        m_sampleRate != rate || m_samplesPerBlock != samplesPerBlock || m_doublePrecision != doublePrecision) {
         m_channelsIn = channelsIn;
         m_channelsOut = channelsOut;
         m_channelsSC = channelsSC;
         m_sampleRate = rate;
         m_samplesPerBlock = samplesPerBlock;
-        m_doublePrecission = doublePrecission;
+        m_doublePrecision = doublePrecision;
         m_needsReconnect = true;
         m_ready = false;
-        logln("init: paramater change, requesting reconnect");
+        logln("init: parameter change, requesting reconnect");
     }
 }
 
@@ -364,7 +364,7 @@ void Client::init() {
                                 m_channelsSC,
                                 m_sampleRate,
                                 m_samplesPerBlock,
-                                m_doublePrecission,
+                                m_doublePrecision,
                                 getTagId(),
                                 0,
                                 0,
@@ -436,7 +436,7 @@ void Client::init() {
             auto opts = RealtimeOptions()
                 .withProcessingTimeMs((uint32)round(m_samplesPerBlock / m_sampleRate * 1000) - 1);
             std::lock_guard<std::mutex> audiolck(m_audioMtx);
-            if (m_doublePrecission) {
+            if (m_doublePrecision) {
                 m_audioStreamerD = std::make_shared<AudioStreamer<double>>(this, audioSock);
                 m_audioStreamerD->startRealtimeThread(opts);
             } else {
