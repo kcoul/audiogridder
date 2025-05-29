@@ -330,6 +330,9 @@ void Client::init() {
     traceScope();
     auto srvInfo = getServer();
     bool useUnixDomain = srvInfo.getLocalMode() && Defaults::unixDomainSocketsSupported();
+    if (useUnixDomain) {
+        socketOptions = socketOptions.usingUnixDomain(useUnixDomain);
+    }
     int port = Defaults::SERVER_PORT + srvInfo.getID();
 
     LockByID lock(*this, INIT2);
@@ -341,7 +344,7 @@ void Client::init() {
 #endif
 
     m_error = true;
-    m_cmdOut = std::make_unique<StreamingSocket>();
+    m_cmdOut = std::make_unique<StreamingSocket>(socketOptions);
 
     if (useUnixDomain) {
         auto socketPath = Defaults::getSocketPath(Defaults::SERVER_SOCK, {{"id", String(srvInfo.getID())}});
@@ -409,22 +412,20 @@ void Client::init() {
             return;
         }
 
-        m_cmdIn = std::make_unique<StreamingSocket>();
+        m_cmdIn = std::make_unique<StreamingSocket>(socketOptions);
         if (useUnixDomain ? !m_cmdIn->connect(workerSocketPath) : !m_cmdIn->connect(srvInfo.getHost(), resp.port)) {
             logln("failed to setup command receive connection");
             m_cmdIn.reset();
         }
         logln("command connection established");
 
-        StreamingSocket* audioSock = nullptr;
-        audioSock = new StreamingSocket;
+        std::unique_ptr<StreamingSocket> audioSock = std::make_unique<StreamingSocket>(socketOptions);
         if (useUnixDomain ? !audioSock->connect(workerSocketPath) : !audioSock->connect(srvInfo.getHost(), resp.port)) {
             logln("failed to setup audio connection");
-            delete audioSock;
-            audioSock = nullptr;
+            audioSock.reset();
         }
 
-        m_screenSocket = std::make_unique<StreamingSocket>();
+        m_screenSocket = std::make_unique<StreamingSocket>(socketOptions);
         if (useUnixDomain ? !m_screenSocket->connect(workerSocketPath)
                           : !m_screenSocket->connect(srvInfo.getHost(), resp.port)) {
             logln("failed to setup screen connection");
@@ -437,10 +438,10 @@ void Client::init() {
                 .withProcessingTimeMs((uint32)round(m_samplesPerBlock / m_sampleRate * 1000) - 1);
             std::lock_guard<std::mutex> audiolck(m_audioMtx);
             if (m_doublePrecision) {
-                m_audioStreamerD = std::make_shared<AudioStreamer<double>>(this, audioSock);
+                m_audioStreamerD = std::make_shared<AudioStreamer<double>>(this, std::move(audioSock));
                 m_audioStreamerD->startRealtimeThread(opts);
             } else {
-                m_audioStreamerF = std::make_shared<AudioStreamer<float>>(this, audioSock);
+                m_audioStreamerF = std::make_shared<AudioStreamer<float>>(this, std::move(audioSock));
                 m_audioStreamerF->startRealtimeThread(opts);
             }
         } else {

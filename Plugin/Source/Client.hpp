@@ -368,6 +368,7 @@ class Client : public Thread, public LogTag, public MouseListener, public KeyLis
     std::mutex m_clientMtx;
     LockID m_clientMtxId = NOLOCK;
 
+    juce::SocketOptions socketOptions;
     std::unique_ptr<StreamingSocket> m_cmdOut;
     std::unique_ptr<StreamingSocket> m_cmdIn;
     std::unique_ptr<StreamingSocket> m_screenSocket;
